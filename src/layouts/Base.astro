@@ -41,9 +41,29 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://nativelens.
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
 
-    <!-- Theme -->
+    <!-- Theme: read user preference BEFORE first paint so we don't flash. -->
     <meta name="theme-color" content="#f0ece1" />
-    <meta name="color-scheme" content="light" />
+    <meta name="color-scheme" content="light dark" />
+    <script is:inline>
+      // Inline + sync = runs before any CSS-driven paint. Reads localStorage
+      // first, falls back to prefers-color-scheme. Sets data-theme on <html>
+      // so the variable block in global.css picks the right palette before
+      // body renders.
+      (function () {
+        try {
+          const stored = localStorage.getItem('nativelens-theme');
+          const theme =
+            stored === 'dark' || stored === 'light'
+              ? stored
+              : window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light';
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (_) {
+          /* localStorage unavailable — falls through to default light */
+        }
+      })();
+    </script>
 
     <!-- Font preconnect: IBM Plex Mono via Google Fonts CDN. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -51,5 +71,57 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://nativelens.
   </head>
   <body>
     <slot />
+
+    <script is:inline>
+      // Theme toggle wiring + intersection-driven section reveal.
+      // No framework, no bundler magic — under 30 lines, fires once on
+      // DOMContentLoaded.
+      document.addEventListener('DOMContentLoaded', function () {
+        // ---- Theme toggle ----
+        var html = document.documentElement;
+        var btn = document.querySelector('[data-theme-toggle]');
+        if (btn) {
+          var sync = function () {
+            var current = html.getAttribute('data-theme') || 'light';
+            btn.textContent = current === 'dark' ? '[ light ]' : '[ dark ]';
+            btn.setAttribute('aria-pressed', current === 'dark' ? 'true' : 'false');
+          };
+          sync();
+          btn.addEventListener('click', function () {
+            var next = (html.getAttribute('data-theme') || 'light') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            try {
+              localStorage.setItem('nativelens-theme', next);
+            } catch (_) {}
+            // Also flip the theme-color meta so iOS Safari chrome matches.
+            var meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) meta.setAttribute('content', next === 'dark' ? '#0c0c0c' : '#f0ece1');
+            sync();
+          });
+        }
+
+        // ---- Reveal sections on enter ----
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(
+            function (entries) {
+              entries.forEach(function (e) {
+                if (e.isIntersecting) {
+                  e.target.setAttribute('data-anim', 'in');
+                  io.unobserve(e.target);
+                }
+              });
+            },
+            { threshold: 0.15 },
+          );
+          document.querySelectorAll('.sec').forEach(function (el) {
+            io.observe(el);
+          });
+        } else {
+          document.querySelectorAll('.sec').forEach(function (el) {
+            el.setAttribute('data-anim', 'in');
+          });
+        }
+      });
+    </script>
   </body>
 </html>

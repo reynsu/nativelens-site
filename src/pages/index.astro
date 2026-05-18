@@ -28,192 +28,305 @@ const FEATURES = [
     body: 'Time-travel dashboard replays any past run frame-by-frame with the component tree alongside the screenshot. Past runs persist under <code>.nativelens/runs/</code>; the dashboard is a thin reader on top of the same NDJSON the live path writes.',
   },
 ];
+
+// Marquee items — duplicated 2x so the loop is seamless.
+const TICKER = [
+  'v' + VERSION,
+  '14/15 floor',
+  '100% high-confidence',
+  '0 dependencies on the bundler',
+  'local-first',
+  'MIT',
+  'detox + expo + EAS',
+  'calibration v4',
+  '2026-05-18',
+];
 ---
 
 <Base>
   <div class="page">
-    <!-- TOP RULE: technical drawing title-block convention -->
+    <!-- TOP TITLE-BLOCK -->
     <header class="topbar">
-      <div class="layout">
+      <div class="layout topbar-layout">
         <div class="topbar-left">
-          <span class="kicker">nativelens</span>
+          <span class="kicker kicker-strong">nativelens</span>
+          <span class="topbar-sep">/</span>
+          <span class="kicker">react-native</span>
         </div>
         <div class="topbar-right">
           <span class="kicker">
             <span class="dot" aria-hidden="true"></span>
-            v{VERSION} · {DATE} · MIT
+            v{VERSION}
+            <span class="topbar-sep">·</span>
+            {DATE}
+            <span class="topbar-sep">·</span>
+            MIT
           </span>
+          <button
+            class="theme-toggle"
+            data-theme-toggle
+            aria-label="Toggle color scheme"
+            aria-pressed="false"
+            type="button"
+          >
+            [ dark ]
+          </button>
         </div>
       </div>
     </header>
 
+    <!-- MARQUEE STATUS TICKER -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        {[...TICKER, ...TICKER].map((t, i) => (
+          <span>
+            <span class="pip">▮</span>&nbsp;{t}
+          </span>
+        ))}
+      </div>
+    </div>
+
     <!-- §01 — HERO -->
-    <section class="layout sec sec-hero">
-      <aside class="spine">
-        <p class="section-num">§01</p>
-        <p class="spine-meta">
-          E2E /<br />React Native /<br />Detox.
-        </p>
-      </aside>
-      <div class="col">
-        <h1>
-          E2E testing<br />
-          for React Native<br />
-          that reads the <em>fiber</em>.
-        </h1>
-        <p class="lede">
-          Detox drives the test. <strong>nativelens</strong> runs inside the app as a
-          probe — subscribed to React fiber commits — and captures the component tree
-          (props, state, hooks) at every action. When an assertion fails, the
-          <strong>diagnosis agent</strong> tells you whether you're looking at a test
-          bug or a real bug.
-        </p>
-        <div class="cta-row">
-          <a class="btn btn-acid" href="#install">[ get started ]</a>
-          <a class="btn" href={GITHUB_URL} rel="noopener">→ github</a>
+    <section class="sec sec-marks sec-hero">
+      <span class="corner-bl" aria-hidden="true">+</span>
+      <span class="corner-br" aria-hidden="true">+</span>
+      <div class="layout">
+        <aside class="spine">
+          <p class="section-num">§01</p>
+          <p class="spine-meta">
+            E2E /<br />React Native /<br />Detox.
+          </p>
+        </aside>
+        <div class="col">
+          <h1>
+            E2E testing<br />
+            for React Native<br />
+            that reads the <em>fiber</em><span class="cursor" aria-hidden="true"></span>
+          </h1>
+          <p class="lede">
+            Detox drives the test. <strong>nativelens</strong> runs inside the app as a
+            probe — subscribed to React fiber commits — and captures the component tree
+            (props, state, hooks) at every action. When an assertion fails, the
+            <strong>diagnosis agent</strong> tells you whether you're looking at a test
+            bug or a real bug.
+          </p>
+          <div class="cta-row">
+            <a class="btn btn-acid" href="#install">[ get started ]</a>
+            <a class="btn" href={GITHUB_URL} rel="noopener">→ github</a>
+          </div>
         </div>
+        <aside class="margin">
+          <p class="margin-note">
+            <span class="margin-anchor">probe:</span>
+            in-app IIFE subscribed to React fiber commits via
+            <a href="https://github.com/aidenybai/bippy" rel="noopener">bippy</a>.
+            Walks the tree on commit, sanitizes props/hooks, ships
+            <code>component:snapshot</code> events over WS.
+          </p>
+          <p class="margin-note">
+            <span class="margin-anchor">diagnosis agent:</span>
+            reads <code>componentSnapshot</code> + spec + source. Returns
+            <code>{`{ classification, confidence, rootCause, evidence, patch? }`}</code>.
+            Default backend is the <code>claude</code> CLI.
+          </p>
+        </aside>
       </div>
     </section>
 
     <hr class="hairline" />
 
     <!-- §02 — WHAT IT IS -->
-    <section class="layout sec">
-      <aside class="spine">
-        <p class="section-num">§02</p>
-        <p class="kicker">what it is</p>
-      </aside>
-      <div class="col">
-        <h2>Detox drives. nativelens reads.</h2>
-        <p>
-          Detox boots your app in an emulator and drives interactions. Inside the app,
-          <strong>nativelens</strong> runs as a probe, subscribed to React fiber commits
-          via <a href="https://github.com/aidenybai/bippy" rel="noopener">bippy</a>. Every
-          action ends with a snapshot of the component tree — every prop, every hook value,
-          every <code>testID</code>, indexed to its owning fiber — shipped to the dashboard
-          over a WebSocket. When a test fails, the diagnosis agent reads that snapshot
-          alongside your source and returns a structured verdict.
-        </p>
+    <section class="sec sec-marks">
+      <span class="corner-bl" aria-hidden="true">+</span>
+      <span class="corner-br" aria-hidden="true">+</span>
+      <div class="layout">
+        <aside class="spine">
+          <p class="section-num">§02</p>
+          <p class="kicker">what it is</p>
+        </aside>
+        <div class="col">
+          <h2>Detox drives. nativelens reads.</h2>
+          <p>
+            Detox boots your app in an emulator and drives interactions. Inside the app,
+            <strong>nativelens</strong> runs as a probe, subscribed to React fiber commits
+            via <a href="https://github.com/aidenybai/bippy" rel="noopener">bippy</a>. Every
+            action ends with a snapshot of the component tree — every prop, every hook value,
+            every <code>testID</code>, indexed to its owning fiber — shipped to the dashboard
+            over a WebSocket. When a test fails, the diagnosis agent reads that snapshot
+            alongside your source and returns a structured verdict.
+          </p>
+        </div>
+        <aside class="margin">
+          <p class="margin-note">
+            <span class="margin-anchor">why fiber:</span>
+            screenshots only capture pixels. The fiber captures state — the
+            <code>onPress: null</code> that the screenshot doesn't show.
+          </p>
+        </aside>
       </div>
     </section>
 
     <hr class="hairline" />
 
     <!-- §03 — INSTALL -->
-    <section id="install" class="layout sec">
-      <aside class="spine">
-        <p class="section-num">§03</p>
-        <p class="kicker">install</p>
-      </aside>
-      <div class="col">
-        <h2>Three commands.</h2>
-        <pre class="code-block"><code><span class="muted"># In your Expo project root</span>
+    <section id="install" class="sec sec-marks">
+      <span class="corner-bl" aria-hidden="true">+</span>
+      <span class="corner-br" aria-hidden="true">+</span>
+      <div class="layout">
+        <aside class="spine">
+          <p class="section-num">§03</p>
+          <p class="kicker">install</p>
+        </aside>
+        <div class="col">
+          <h2>Three commands.</h2>
+          <pre class="code-block"><code><span class="muted"># In your Expo project root</span>
 $ npx @reynsu/nativelens-cli init
 $ pnpm install
 $ nativelens run                <span class="muted"># harness + dashboard on :7777</span></code></pre>
-        <p class="fine-print">
-          Expo + EAS dev client only in v0.1. Bare React Native is on the roadmap. Full
-          walkthrough in the <a href={`${GITHUB_URL}/blob/main/packages/cli/README.md`} rel="noopener">CLI
-          README</a>.
-        </p>
+          <p class="fine-print">
+            Expo + EAS dev client only in v0.1. Bare React Native is on the roadmap. Full
+            walkthrough in the <a href={`${GITHUB_URL}/blob/main/packages/cli/README.md`} rel="noopener">CLI
+            README</a>.
+          </p>
+        </div>
+        <aside class="margin">
+          <p class="margin-note">
+            <span class="margin-anchor">init:</span>
+            writes <code>.nativelens/nativelens.config.json</code> and adds the probe +
+            adapter to <code>devDependencies</code>. Idempotent.
+          </p>
+        </aside>
       </div>
     </section>
 
     <hr class="hairline" />
 
     <!-- §04 — FEATURES -->
-    <section class="layout sec">
-      <aside class="spine">
-        <p class="section-num">§04</p>
-        <p class="kicker">what you get</p>
-      </aside>
-      <div class="col">
-        <h2>Built around the snapshot.</h2>
-        <ol class="feature-list">
-          {FEATURES.map((f) => (
-            <li class="feature-item">
-              <div class="feature-marker">
-                <span class="feature-num">{f.n}</span>
-              </div>
-              <div class="feature-body">
-                <h3>{f.name}</h3>
-                <p set:html={f.body} />
-              </div>
-            </li>
-          ))}
-        </ol>
+    <section class="sec sec-marks">
+      <span class="corner-bl" aria-hidden="true">+</span>
+      <span class="corner-br" aria-hidden="true">+</span>
+      <div class="layout">
+        <aside class="spine">
+          <p class="section-num">§04</p>
+          <p class="kicker">what you get</p>
+        </aside>
+        <div class="col">
+          <h2>Built around the snapshot.</h2>
+          <ol class="feature-list">
+            {FEATURES.map((f) => (
+              <li class="feature-item">
+                <div class="feature-marker">
+                  <span class="feature-num">{f.n}</span>
+                </div>
+                <div class="feature-body">
+                  <h3>{f.name}</h3>
+                  <p set:html={f.body} />
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+        <aside class="margin">
+          <p class="margin-note">
+            <span class="margin-anchor">non-negotiables:</span>
+            React only · local-first · no telemetry · diagnosis never auto-applies.
+          </p>
+        </aside>
       </div>
     </section>
 
     <hr class="hairline" />
 
     <!-- §05 — CALIBRATION CALLOUT -->
-    <section class="layout sec sec-calib">
-      <aside class="spine">
-        <p class="section-num">§05</p>
-        <p class="kicker">why trustworthy</p>
-      </aside>
-      <div class="col">
-        <h2>The eval gate measures itself.</h2>
+    <section class="sec sec-marks sec-calib">
+      <span class="corner-bl" aria-hidden="true">+</span>
+      <span class="corner-br" aria-hidden="true">+</span>
+      <div class="layout">
+        <aside class="spine">
+          <p class="section-num">§05</p>
+          <p class="kicker">why trustworthy</p>
+        </aside>
+        <div class="col">
+          <h2>The eval gate measures itself.</h2>
 
-        <div class="metric-frame" role="figure" aria-label="Eval gate calibration v4">
-          <pre class="metric-art" aria-hidden="true">┌──────────────────────────────────────────┐
+          <div class="metric-frame" role="figure" aria-label="Eval gate calibration v4">
+            <pre class="metric-art" aria-hidden="true">┌──────────────────────────────────────────┐
 │  CALIBRATION v4 — 2026-05-18             │
 ├──────────────────────────────────────────┤</pre>
-          <div class="metric-grid">
-            <div class="metric-cell">
-              <p class="metric-label">floor accuracy</p>
-              <p class="metric-value">14<span class="metric-divider">/</span>15</p>
-              <p class="metric-sub">93.3% over 2 runs</p>
+            <div class="metric-grid">
+              <div class="metric-cell">
+                <p class="metric-label">floor accuracy</p>
+                <p class="metric-value">14<span class="metric-divider">/</span>15</p>
+                <p class="metric-sub">93.3% over 2 runs</p>
+              </div>
+              <div class="metric-cell metric-cell-accent">
+                <p class="metric-label">high-confidence</p>
+                <p class="metric-value">100<span class="metric-divider">%</span></p>
+                <p class="metric-sub">when it says "high", it's right</p>
+              </div>
+              <div class="metric-cell">
+                <p class="metric-label">variance</p>
+                <p class="metric-value">1<span class="metric-divider">/</span>15</p>
+                <p class="metric-sub">cases flipping run-to-run</p>
+              </div>
             </div>
-            <div class="metric-cell metric-cell-accent">
-              <p class="metric-label">high-confidence</p>
-              <p class="metric-value">100<span class="metric-divider">%</span></p>
-              <p class="metric-sub">when it says "high", it's right</p>
-            </div>
-            <div class="metric-cell">
-              <p class="metric-label">variance</p>
-              <p class="metric-value">1<span class="metric-divider">/</span>15</p>
-              <p class="metric-sub">cases flipping run-to-run</p>
-            </div>
+            <pre class="metric-art" aria-hidden="true">└──────────────────────────────────────────┘</pre>
           </div>
-          <pre class="metric-art" aria-hidden="true">└──────────────────────────────────────────┘</pre>
-        </div>
 
-        <p class="post-metric">
-          Every release of the diagnosis agent runs against 15 synthetic React Native
-          failure cases. Thresholds are measured baselines, not aspirational targets,
-          and the gate runs nightly to catch regression from prompt or SDK drift.
-        </p>
-        <p class="fine-print">
-          Per-case calibration history lives in
-          <a href={`${GITHUB_URL}/blob/main/packages/cli/src/eval/thresholds.ts`} rel="noopener">
-            thresholds.ts
-          </a>.
-        </p>
+          <p class="post-metric">
+            Every release of the diagnosis agent runs against 15 synthetic React Native
+            failure cases. Thresholds are measured baselines, not aspirational targets,
+            and the gate runs nightly to catch regression from prompt or SDK drift.
+          </p>
+          <p class="fine-print">
+            Per-case calibration history lives in
+            <a href={`${GITHUB_URL}/blob/main/packages/cli/src/eval/thresholds.ts`} rel="noopener">
+              thresholds.ts
+            </a>.
+          </p>
+        </div>
+        <aside class="margin">
+          <p class="margin-note">
+            <span class="margin-anchor">v2 → v4:</span>
+            v2 ran on contaminated <code>process.cwd()</code> (67% floor). v3 isolated
+            the agent's cwd to an empty tmp dir (80%). v4 patched the rubric so
+            race/timing signatures default to <code>flaky</code> (93.3%).
+          </p>
+          <p class="margin-note">
+            <span class="margin-anchor">the eval is the spec:</span>
+            CI runs nightly, fails on drop &gt;5% from baseline.
+          </p>
+        </aside>
       </div>
     </section>
 
     <hr class="hairline" />
 
     <!-- FOOTER -->
-    <footer class="layout sec sec-footer">
-      <aside class="spine">
-        <p class="section-num">eof</p>
-      </aside>
-      <div class="col">
-        <div class="footer-row">
-          <a href={GITHUB_URL} rel="noopener">github</a>
-          <span class="sep" aria-hidden="true">·</span>
-          <a href={NPM_URL} rel="noopener">npm</a>
-          <span class="sep" aria-hidden="true">·</span>
-          <a href={`${GITHUB_URL}/blob/main/LICENSE`} rel="noopener">MIT license</a>
+    <footer class="sec sec-footer">
+      <div class="layout">
+        <aside class="spine">
+          <p class="section-num">eof</p>
+        </aside>
+        <div class="col">
+          <div class="footer-row">
+            <a href={GITHUB_URL} rel="noopener">github</a>
+            <span class="sep" aria-hidden="true">·</span>
+            <a href={NPM_URL} rel="noopener">npm</a>
+            <span class="sep" aria-hidden="true">·</span>
+            <a href={`${GITHUB_URL}/blob/main/LICENSE`} rel="noopener">MIT license</a>
+          </div>
+          <p class="footer-meta">
+            built with <a href="https://astro.build" rel="noopener">astro</a>.
+            source / <a href="https://github.com/reynsu/nativelens-site" rel="noopener">nativelens-site</a>.
+            ©︎ 2026.
+          </p>
         </div>
-        <p class="footer-meta">
-          built with <a href="https://astro.build" rel="noopener">astro</a>.
-          source / <a href="https://github.com/reynsu/nativelens-site" rel="noopener">nativelens-site</a>.
-          ©︎ 2026.
-        </p>
+        <aside class="margin">
+          <p class="margin-note">
+            <span class="margin-anchor">fin.</span>
+          </p>
+        </aside>
       </div>
     </footer>
   </div>
@@ -224,75 +337,41 @@ $ nativelens run                <span class="muted"># harness + dashboard on :77
     min-height: 100vh;
   }
 
-  /* TOP BAR — engineering-drawing title block */
+  /* TOP BAR */
   .topbar {
-    padding: 1rem 0;
+    padding: 0.8rem 0;
     border-bottom: 1px solid var(--hairline);
     background: var(--paper);
     background-image: none;
   }
 
-  .topbar .layout {
-    display: flex;
+  .topbar-layout {
+    display: flex !important;
     justify-content: space-between;
     align-items: center;
-    grid-template-columns: unset;
+    grid-template-columns: none !important;
+    gap: 1rem;
   }
 
-  .topbar-left .kicker {
+  .topbar-left,
+  .topbar-right {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .topbar-right {
+    gap: 0.75rem;
+  }
+
+  .kicker-strong {
     color: var(--ink);
     font-weight: 500;
   }
 
-  .topbar-right .kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .dot {
-    display: inline-block;
-    width: 0.55rem;
-    height: 0.55rem;
-    background: var(--acid);
-    border: 1px solid var(--ink);
-    border-radius: 50%;
-  }
-
-  /* SECTION GENERIC */
-  .sec {
-    padding: clamp(2.5rem, 6vw, 5rem) var(--gutter);
-    background: var(--paper);
-    background-image: none;
-    margin: 0 auto;
-    max-width: var(--content-max);
-    box-sizing: border-box;
-  }
-
-  .spine {
-    border-right: 1px dashed var(--hairline);
-    padding-right: clamp(1rem, 2.5vw, 2rem);
-    align-self: start;
-  }
-
-  @media (max-width: 720px) {
-    .spine {
-      border-right: 0;
-      border-bottom: 1px dashed var(--hairline);
-      padding-right: 0;
-      padding-bottom: 1rem;
-      margin-bottom: 1rem;
-      display: flex;
-      gap: 1rem;
-      align-items: baseline;
-    }
-  }
-
-  .spine-meta {
-    font-size: 0.78rem;
-    color: var(--ink-muted);
-    line-height: 1.6;
-    margin: 0;
+  .topbar-sep {
+    color: var(--ink-subtle);
   }
 
   /* HERO */
@@ -322,7 +401,7 @@ $ nativelens run                <span class="muted"># harness + dashboard on :77
     flex-wrap: wrap;
   }
 
-  /* INSTALL CODE BLOCK — refined, no heavy chrome */
+  /* INSTALL CODE BLOCK */
   .code-block {
     margin: 1.5rem 0 1rem;
     padding: 1.25rem 1.5rem;
@@ -398,7 +477,7 @@ $ nativelens run                <span class="muted"># harness + dashboard on :77
     color: var(--ink-soft);
   }
 
-  /* CALIBRATION METRIC FRAME — ASCII box-drawing decorations */
+  /* CALIBRATION METRIC FRAME */
   .sec-calib {
     padding-bottom: clamp(3rem, 7vw, 5.5rem);
   }
@@ -412,7 +491,7 @@ $ nativelens run                <span class="muted"># harness + dashboard on :77
     margin: 0;
     padding: 0;
     color: var(--ink-muted);
-    font-size: clamp(0.6rem, 1.4vw, 0.78rem);
+    font-size: clamp(0.55rem, 1.3vw, 0.72rem);
     line-height: 1;
     white-space: pre;
     overflow: hidden;
@@ -448,6 +527,17 @@ $ nativelens run                <span class="muted"># harness + dashboard on :77
 
   .metric-cell-accent {
     background: var(--acid);
+  }
+
+  [data-theme='dark'] .metric-cell-accent {
+    background: var(--acid);
+  }
+
+  [data-theme='dark'] .metric-cell-accent .metric-label,
+  [data-theme='dark'] .metric-cell-accent .metric-sub,
+  [data-theme='dark'] .metric-cell-accent .metric-value,
+  [data-theme='dark'] .metric-cell-accent .metric-divider {
+    color: var(--paper); /* dark text on acid in both themes */
   }
 
   .metric-cell-accent .metric-label,
