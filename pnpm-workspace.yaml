@@ -1,0 +1,8 @@
+# Single-package project (no workspace). The `packages:` key is intentionally
+# omitted — pnpm uses this file only to honor `allowBuilds`, which lets the
+# postinstall scripts for esbuild + sharp run during `pnpm install`. Both are
+# Astro transitive deps (esbuild for the build pipeline, sharp for image
+# optimization — unused today but loaded eagerly).
+allowBuilds:
+  esbuild: true
+  sharp: true

@@ -1,0 +1,51 @@
+---
+// Base layout — common <head>, meta, and global styles.
+//
+// All meaningful content lives in the page; this layout just owns the
+// HTML scaffold so SEO + OG tags stay consistent across any future pages.
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'nativelens — E2E testing for React Native',
+  description = 'Captures the React component tree (props, state, hooks) at every action, not just screenshots. AI-diagnosed test failures, local-first.',
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://nativelens.dev').toString();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- Theme -->
+    <meta name="theme-color" content="#0a0a0c" />
+    <meta name="color-scheme" content="dark" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
