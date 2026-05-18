@@ -4,235 +4,523 @@ import Base from '../layouts/Base.astro';
 const GITHUB_URL = 'https://github.com/reynsu/nativelens';
 const NPM_URL = 'https://www.npmjs.com/package/@reynsu/nativelens-cli';
 const VERSION = '0.2.1';
+const DATE = '2026-05';
+
+const FEATURES = [
+  {
+    n: '01',
+    name: 'probe',
+    body: 'React fiber commits trigger a serialized component tree — every prop, hook value, and <code>testID</code> indexed to its owning fiber. Captures what screenshots can\'t see: stale state, missing handlers, hook desync.',
+  },
+  {
+    n: '02',
+    name: 'diagnose',
+    body: '<code>nativelens diagnose</code> reads the failure snapshot, your spec, and the screen source, then emits a structured verdict: <code>real-bug</code>, <code>test-bug</code>, <code>flaky</code>, or <code>env-issue</code> — with evidence, confidence, and an optional patch.',
+  },
+  {
+    n: '03',
+    name: 'local-first',
+    body: 'Subscription path via <code>claude login</code> uses your Pro/Max plan, not pay-per-token API. The <code>ollama</code> backend is a fully offline escape hatch — no credentials, no cloud, no telemetry.',
+  },
+  {
+    n: '04',
+    name: 'replay',
+    body: 'Time-travel dashboard replays any past run frame-by-frame with the component tree alongside the screenshot. Past runs persist under <code>.nativelens/runs/</code>; the dashboard is a thin reader on top of the same NDJSON the live path writes.',
+  },
+];
 ---
 
 <Base>
-  <main>
-    <!-- HERO -->
-    <section class="hero">
-      <p class="eyebrow">v{VERSION} · MIT · React Native · Detox</p>
-      <h1>nativelens</h1>
-      <p class="lede">
-        E2E testing for React Native that captures the <strong>React component tree</strong>
-        — props, state, hooks — at every action, not just the native view hierarchy or
-        screenshots. Every failed assertion ships with the exact fiber state that produced
-        it, and a <strong>diagnosis agent</strong> tells you whether you're looking at a
-        test bug or a real bug.
-      </p>
-      <div class="cta-row">
-        <a class="btn btn-primary" href="#install">
-          Get started
-          <span aria-hidden="true">→</span>
-        </a>
-        <a class="btn btn-secondary" href={GITHUB_URL} rel="noopener">
-          GitHub
-        </a>
+  <div class="page">
+    <!-- TOP RULE: technical drawing title-block convention -->
+    <header class="topbar">
+      <div class="layout">
+        <div class="topbar-left">
+          <span class="kicker">nativelens</span>
+        </div>
+        <div class="topbar-right">
+          <span class="kicker">
+            <span class="dot" aria-hidden="true"></span>
+            v{VERSION} · {DATE} · MIT
+          </span>
+        </div>
       </div>
-    </section>
+    </header>
 
-    <!-- WHAT IT IS -->
-    <section class="what">
-      <p class="eyebrow">What it is</p>
-      <h2>Detox drives the test. nativelens reads the fiber.</h2>
-      <p>
-        Detox boots your app in an emulator and drives interactions. nativelens runs
-        inside the app as a <strong>probe</strong>, subscribed to React fiber commits
-        via <a href="https://github.com/aidenybai/bippy" rel="noopener">bippy</a>. Every
-        action ends with a snapshot of the component tree — every prop, every hook value,
-        every <code>testID</code>, indexed and shipped to the dashboard over a WebSocket.
-        When a test fails, the diagnosis agent reads that snapshot alongside your source
-        and returns a structured verdict.
-      </p>
-    </section>
-
-    <!-- INSTALL -->
-    <section id="install" class="install">
-      <p class="eyebrow">Quick install</p>
-      <h2>Three commands to running tests.</h2>
-      <pre class="code-block"><code><span class="comment"># In your Expo project root</span>
-<span class="prompt">$</span>npx @reynsu/nativelens-cli init
-<span class="prompt">$</span>pnpm install
-<span class="prompt">$</span>nativelens run                  <span class="comment"># harness + dashboard on :7777</span></code></pre>
-      <p class="fine-print">
-        Expo + EAS dev client only in v0.1. Bare React Native is on the roadmap. Full
-        walkthrough in the <a href={`${GITHUB_URL}/blob/main/packages/cli/README.md`} rel="noopener">CLI
-        README</a>.
-      </p>
-    </section>
-
-    <!-- FEATURES -->
-    <section class="features">
-      <p class="eyebrow">What you get</p>
-      <h2>Built around the snapshot.</h2>
-
-      <div class="feature-grid">
-        <div class="feature-card">
-          <h3>Probe-based snapshots</h3>
-          <p>
-            React fiber commits trigger a serialized component tree — every prop, hook
-            value, and <code>testID</code> indexed to its owning fiber. Captures what
-            screenshots can't see: stale state, missing handlers, hook desync.
-          </p>
-        </div>
-
-        <div class="feature-card">
-          <h3>Diagnosis agent</h3>
-          <p>
-            <code>nativelens diagnose</code> reads the failure snapshot, your spec, and
-            the screen source, then emits a structured verdict: <code>real-bug</code>,
-            <code>test-bug</code>, <code>flaky</code>, or <code>env-issue</code> — with
-            evidence, confidence, and an optional patch.
-          </p>
-        </div>
-
-        <div class="feature-card">
-          <h3>Local-first</h3>
-          <p>
-            Subscription path via <code>claude login</code> uses your Pro/Max plan, not
-            pay-per-token API. The <code>ollama</code> backend is a fully offline escape
-            hatch — no credentials, no cloud, no telemetry.
-          </p>
-        </div>
-
-        <div class="feature-card">
-          <h3>Time-travel dashboard</h3>
-          <p>
-            Replay any past run frame-by-frame with the component tree alongside the
-            screenshot. Past runs are persisted under <code>.nativelens/runs/</code> —
-            the dashboard is just a thin reader on top of the same NDJSON the live path
-            writes.
-          </p>
+    <!-- §01 — HERO -->
+    <section class="layout sec sec-hero">
+      <aside class="spine">
+        <p class="section-num">§01</p>
+        <p class="spine-meta">
+          E2E /<br />React Native /<br />Detox.
+        </p>
+      </aside>
+      <div class="col">
+        <h1>
+          E2E testing<br />
+          for React Native<br />
+          that reads the <em>fiber</em>.
+        </h1>
+        <p class="lede">
+          Detox drives the test. <strong>nativelens</strong> runs inside the app as a
+          probe — subscribed to React fiber commits — and captures the component tree
+          (props, state, hooks) at every action. When an assertion fails, the
+          <strong>diagnosis agent</strong> tells you whether you're looking at a test
+          bug or a real bug.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-acid" href="#install">[ get started ]</a>
+          <a class="btn" href={GITHUB_URL} rel="noopener">→ github</a>
         </div>
       </div>
     </section>
 
-    <!-- CALIBRATION SECTION (one of nativelens's distinctive features) -->
-    <section class="calibration">
-      <p class="eyebrow">Why the diagnosis agent is trustworthy</p>
-      <h2>The eval gate measures itself.</h2>
-      <p>
-        Every release of the diagnosis agent runs against 15 synthetic React Native
-        failure cases. Calibration v4 ships at <strong>14/15 floor accuracy</strong>
-        and <strong>100% high-confidence calibration</strong> — when the agent says
-        "high", it's right. The thresholds are measured baselines, not aspirational
-        targets, and the gate runs nightly to catch regression from prompt or
-        SDK drift.
-      </p>
-      <p class="fine-print">
-        Calibration history + per-case results live in the
-        <a href={`${GITHUB_URL}/blob/main/packages/cli/src/eval/thresholds.ts`} rel="noopener">
-          thresholds.ts inline log
-        </a>.
-      </p>
+    <hr class="hairline" />
+
+    <!-- §02 — WHAT IT IS -->
+    <section class="layout sec">
+      <aside class="spine">
+        <p class="section-num">§02</p>
+        <p class="kicker">what it is</p>
+      </aside>
+      <div class="col">
+        <h2>Detox drives. nativelens reads.</h2>
+        <p>
+          Detox boots your app in an emulator and drives interactions. Inside the app,
+          <strong>nativelens</strong> runs as a probe, subscribed to React fiber commits
+          via <a href="https://github.com/aidenybai/bippy" rel="noopener">bippy</a>. Every
+          action ends with a snapshot of the component tree — every prop, every hook value,
+          every <code>testID</code>, indexed to its owning fiber — shipped to the dashboard
+          over a WebSocket. When a test fails, the diagnosis agent reads that snapshot
+          alongside your source and returns a structured verdict.
+        </p>
+      </div>
     </section>
+
+    <hr class="hairline" />
+
+    <!-- §03 — INSTALL -->
+    <section id="install" class="layout sec">
+      <aside class="spine">
+        <p class="section-num">§03</p>
+        <p class="kicker">install</p>
+      </aside>
+      <div class="col">
+        <h2>Three commands.</h2>
+        <pre class="code-block"><code><span class="muted"># In your Expo project root</span>
+$ npx @reynsu/nativelens-cli init
+$ pnpm install
+$ nativelens run                <span class="muted"># harness + dashboard on :7777</span></code></pre>
+        <p class="fine-print">
+          Expo + EAS dev client only in v0.1. Bare React Native is on the roadmap. Full
+          walkthrough in the <a href={`${GITHUB_URL}/blob/main/packages/cli/README.md`} rel="noopener">CLI
+          README</a>.
+        </p>
+      </div>
+    </section>
+
+    <hr class="hairline" />
+
+    <!-- §04 — FEATURES -->
+    <section class="layout sec">
+      <aside class="spine">
+        <p class="section-num">§04</p>
+        <p class="kicker">what you get</p>
+      </aside>
+      <div class="col">
+        <h2>Built around the snapshot.</h2>
+        <ol class="feature-list">
+          {FEATURES.map((f) => (
+            <li class="feature-item">
+              <div class="feature-marker">
+                <span class="feature-num">{f.n}</span>
+              </div>
+              <div class="feature-body">
+                <h3>{f.name}</h3>
+                <p set:html={f.body} />
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <hr class="hairline" />
+
+    <!-- §05 — CALIBRATION CALLOUT -->
+    <section class="layout sec sec-calib">
+      <aside class="spine">
+        <p class="section-num">§05</p>
+        <p class="kicker">why trustworthy</p>
+      </aside>
+      <div class="col">
+        <h2>The eval gate measures itself.</h2>
+
+        <div class="metric-frame" role="figure" aria-label="Eval gate calibration v4">
+          <pre class="metric-art" aria-hidden="true">┌──────────────────────────────────────────┐
+│  CALIBRATION v4 — 2026-05-18             │
+├──────────────────────────────────────────┤</pre>
+          <div class="metric-grid">
+            <div class="metric-cell">
+              <p class="metric-label">floor accuracy</p>
+              <p class="metric-value">14<span class="metric-divider">/</span>15</p>
+              <p class="metric-sub">93.3% over 2 runs</p>
+            </div>
+            <div class="metric-cell metric-cell-accent">
+              <p class="metric-label">high-confidence</p>
+              <p class="metric-value">100<span class="metric-divider">%</span></p>
+              <p class="metric-sub">when it says "high", it's right</p>
+            </div>
+            <div class="metric-cell">
+              <p class="metric-label">variance</p>
+              <p class="metric-value">1<span class="metric-divider">/</span>15</p>
+              <p class="metric-sub">cases flipping run-to-run</p>
+            </div>
+          </div>
+          <pre class="metric-art" aria-hidden="true">└──────────────────────────────────────────┘</pre>
+        </div>
+
+        <p class="post-metric">
+          Every release of the diagnosis agent runs against 15 synthetic React Native
+          failure cases. Thresholds are measured baselines, not aspirational targets,
+          and the gate runs nightly to catch regression from prompt or SDK drift.
+        </p>
+        <p class="fine-print">
+          Per-case calibration history lives in
+          <a href={`${GITHUB_URL}/blob/main/packages/cli/src/eval/thresholds.ts`} rel="noopener">
+            thresholds.ts
+          </a>.
+        </p>
+      </div>
+    </section>
+
+    <hr class="hairline" />
 
     <!-- FOOTER -->
-    <footer>
-      <div class="footer-inner">
-        <div class="footer-links">
+    <footer class="layout sec sec-footer">
+      <aside class="spine">
+        <p class="section-num">eof</p>
+      </aside>
+      <div class="col">
+        <div class="footer-row">
           <a href={GITHUB_URL} rel="noopener">github</a>
-          <span aria-hidden="true">·</span>
+          <span class="sep" aria-hidden="true">·</span>
           <a href={NPM_URL} rel="noopener">npm</a>
-          <span aria-hidden="true">·</span>
-          <a href={`${GITHUB_URL}/blob/main/LICENSE`} rel="noopener">MIT</a>
+          <span class="sep" aria-hidden="true">·</span>
+          <a href={`${GITHUB_URL}/blob/main/LICENSE`} rel="noopener">MIT license</a>
         </div>
         <p class="footer-meta">
-          Built with <a href="https://astro.build" rel="noopener">Astro</a>.
-          Source: <a href="https://github.com/reynsu/nativelens-site" rel="noopener">nativelens-site</a>.
+          built with <a href="https://astro.build" rel="noopener">astro</a>.
+          source / <a href="https://github.com/reynsu/nativelens-site" rel="noopener">nativelens-site</a>.
+          ©︎ 2026.
         </p>
       </div>
     </footer>
-  </main>
+  </div>
 </Base>
 
 <style>
-  /* Hero */
-  .hero {
-    padding: 6rem 0 5rem;
-    border-bottom: 1px solid var(--border);
+  .page {
+    min-height: 100vh;
+  }
+
+  /* TOP BAR — engineering-drawing title block */
+  .topbar {
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--hairline);
+    background: var(--paper);
+    background-image: none;
+  }
+
+  .topbar .layout {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    grid-template-columns: unset;
+  }
+
+  .topbar-left .kicker {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .topbar-right .kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .dot {
+    display: inline-block;
+    width: 0.55rem;
+    height: 0.55rem;
+    background: var(--acid);
+    border: 1px solid var(--ink);
+    border-radius: 50%;
+  }
+
+  /* SECTION GENERIC */
+  .sec {
+    padding: clamp(2.5rem, 6vw, 5rem) var(--gutter);
+    background: var(--paper);
+    background-image: none;
+    margin: 0 auto;
+    max-width: var(--content-max);
+    box-sizing: border-box;
+  }
+
+  .spine {
+    border-right: 1px dashed var(--hairline);
+    padding-right: clamp(1rem, 2.5vw, 2rem);
+    align-self: start;
+  }
+
+  @media (max-width: 720px) {
+    .spine {
+      border-right: 0;
+      border-bottom: 1px dashed var(--hairline);
+      padding-right: 0;
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+      display: flex;
+      gap: 1rem;
+      align-items: baseline;
+    }
+  }
+
+  .spine-meta {
+    font-size: 0.78rem;
+    color: var(--ink-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* HERO */
+  .sec-hero {
+    padding-top: clamp(4rem, 10vw, 8rem);
+    padding-bottom: clamp(4rem, 8vw, 6rem);
+  }
+
+  .sec-hero h1 em {
+    font-style: normal;
+    background: var(--acid);
+    padding: 0 0.1em;
+    border-radius: 1px;
   }
 
   .lede {
-    font-size: 1.15rem;
-    line-height: 1.65;
-    margin: 1.5rem 0 2.5rem;
-    max-width: 60ch;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin: 2rem 0 2.5rem;
+    color: var(--ink-soft);
+    max-width: 56ch;
   }
 
   .cta-row {
     display: flex;
-    gap: 1rem;
+    gap: 0.75rem;
     flex-wrap: wrap;
   }
 
-  /* Generic helpers */
+  /* INSTALL CODE BLOCK — refined, no heavy chrome */
+  .code-block {
+    margin: 1.5rem 0 1rem;
+    padding: 1.25rem 1.5rem;
+    background: var(--paper-soft);
+    border: 1px solid var(--ink);
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    line-height: 1.75;
+    color: var(--ink);
+    border-radius: 0;
+  }
+
+  .code-block code {
+    background: transparent;
+    padding: 0;
+    border: 0;
+    font-size: 1em;
+  }
+
+  .code-block .muted {
+    color: var(--ink-muted);
+  }
+
   .fine-print {
-    font-size: 0.875rem;
-    color: var(--fg-subtle);
+    font-size: 0.82rem;
+    color: var(--ink-muted);
     margin-top: 1rem;
   }
 
-  /* Features grid */
-  .feature-grid {
+  /* FEATURES — numbered list with hanging numerals */
+  .feature-list {
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .feature-item {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-    gap: 1.25rem;
-    margin-top: 2rem;
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    gap: 1rem;
+    padding: 1.5rem 0;
+    border-top: 1px dashed var(--hairline-soft);
   }
 
-  .feature-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1.5rem;
-    transition: border-color 160ms ease;
+  .feature-item:last-child {
+    border-bottom: 1px dashed var(--hairline-soft);
   }
 
-  .feature-card:hover {
-    border-color: var(--border-strong);
+  .feature-marker {
+    align-self: start;
   }
 
-  .feature-card h3 {
-    margin-bottom: 0.5rem;
-    color: var(--accent);
-  }
-
-  .feature-card p {
+  .feature-num {
+    display: inline-block;
     font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--ink-muted);
+    letter-spacing: 0.05em;
+  }
+
+  .feature-body h3 {
+    margin: 0 0 0.5rem;
+    color: var(--ink);
+  }
+
+  .feature-body p {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: var(--ink-soft);
+  }
+
+  /* CALIBRATION METRIC FRAME — ASCII box-drawing decorations */
+  .sec-calib {
+    padding-bottom: clamp(3rem, 7vw, 5.5rem);
+  }
+
+  .metric-frame {
+    margin: 2rem 0 2rem;
+    font-family: var(--font-mono);
+  }
+
+  .metric-art {
+    margin: 0;
+    padding: 0;
+    color: var(--ink-muted);
+    font-size: clamp(0.6rem, 1.4vw, 0.78rem);
+    line-height: 1;
+    white-space: pre;
+    overflow: hidden;
+  }
+
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: 0;
+    border-left: 1px solid var(--ink);
+    border-right: 1px solid var(--ink);
+  }
+
+  .metric-cell {
+    padding: 1.5rem 1.25rem;
+    border-right: 1px solid var(--hairline);
+    background: var(--paper);
+  }
+
+  .metric-cell:last-child {
+    border-right: 0;
+  }
+
+  @media (max-width: 720px) {
+    .metric-cell {
+      border-right: 0;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .metric-cell:last-child {
+      border-bottom: 0;
+    }
+  }
+
+  .metric-cell-accent {
+    background: var(--acid);
+  }
+
+  .metric-cell-accent .metric-label,
+  .metric-cell-accent .metric-sub {
+    color: var(--ink-soft);
+  }
+
+  .metric-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-muted);
+    margin: 0 0 0.5rem;
+  }
+
+  .metric-value {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 500;
+    line-height: 1;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    margin: 0 0 0.5rem;
+    font-feature-settings: 'tnum' 1;
+  }
+
+  .metric-divider {
+    color: var(--ink-muted);
+    font-weight: 400;
+    padding: 0 0.1em;
+  }
+
+  .metric-sub {
+    font-size: 0.78rem;
+    color: var(--ink-muted);
     margin: 0;
   }
 
-  /* Calibration section */
-  .calibration p {
-    font-size: 1.05rem;
+  .post-metric {
+    margin-top: 2rem;
   }
 
-  /* Footer */
-  footer {
-    padding: 3rem 0 4rem;
-    border-top: 1px solid var(--border);
+  /* FOOTER */
+  .sec-footer {
+    padding: 2.5rem var(--gutter) 4rem;
   }
 
-  .footer-inner {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .footer-links {
+  .footer-row {
     display: flex;
     gap: 0.75rem;
-    font-family: var(--font-mono);
-    font-size: 0.92rem;
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
   }
 
-  .footer-links span {
-    color: var(--fg-subtle);
+  .footer-row a {
+    border-bottom: 0;
+  }
+
+  .footer-row a:hover {
+    background: var(--acid);
+  }
+
+  .footer-row .sep {
+    color: var(--ink-subtle);
   }
 
   .footer-meta {
     font-size: 0.78rem;
-    color: var(--fg-subtle);
+    color: var(--ink-muted);
     margin: 0;
+  }
+
+  .footer-meta a {
+    color: var(--ink-soft);
+    border-bottom: 1px solid var(--hairline);
   }
 </style>
