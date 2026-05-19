@@ -22,3 +22,10 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# skills (npx skills install) — vendor files. The `skills-lock.json`
+# at the repo root is the source of truth; collaborators rehydrate via
+# `npx skills install` after cloning.
+.agents/
+.claude/skills/
+
